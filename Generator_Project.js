@@ -6,19 +6,19 @@ let MUTATION_COUNT = 5; // Allow the user to set this?
 let ascii
 
 function preload(){
-  font = loadFont('assets/unispace/Unispace Rg.otf');
+  font = loadFont('assets/JAi_____.TTF');
 }
 
 function setup() {
   createCanvas(640, 480);
+  background(255);
   //randomSeed(0);    // set a random seed 
-  //background(random(50,100), random(50,100), random(175,255));
-  //textFont(font);
+  textFont(font);
   fill(0);
   rectMode(CENTER);
   textSize(15);
 
-  ascii = ["X", "-", "o", "O", "~", "s", "π", "φ", "∩", "£"];  // this will be the list of environment objects
+  ascii = ["X", "-", "o", "O", "~", "s", "π", "T", "|", "£"];  // this will be the list of environment objects
 
   // fill out the array with nothing but dashes (grass)
   for(x = 0; x < width; x++){
@@ -28,6 +28,7 @@ function setup() {
     }
   }
 
+  randomize_map(map);
   for(i = 0; i < MUTATION_COUNT; i++){
     mutate(map);
   }
@@ -35,41 +36,30 @@ function setup() {
   displayMap(map);
 }
 
-function mutate(map){
+function randomize_map(map){
   for(c = 0; c < map.length; c++){
     if(map[c] == null){
-      console.error("ERROR: mutate(): uninitialized map")
+      console.error("ERROR: randomize_map(): uninitialized map")
     }
     for(r = 0; r < map[c].length; r++){
       chance = random();
-      if(chance <= 0.25){
+      if(chance <= 0.10){
         new_sym = random(ascii);
-        if(new_sym == 'X' && Xcount <= 0){
-              Xcount++;
-        }
-        else{
-          while(new_sym == "X"){
-            new_sym = random(ascii);
-          }
-        }
         map[r][c] = new_sym;
       }
     }
   }
-  
+}
+
+function mutate(map){
   for(c = 0; c < map.length; c++){
+    if(map[c] == null){
+      console.error("ERROR: randomize_map(): uninitialized map")
+    }
     for(r = 0; r < map[c].length; r++){
       let symbol = map[r][c];
 
-      if(symbol == "X"){ // if it's the treasure
-        if(Xcount <= 0){
-          Xcount++;
-        }
-        else{
-          symbol = "-";
-        }
-      }
-      else if(symbol == "o"){
+      if(symbol == "o"){
         neighbors = check_neighbors(map, r, c);
         if(neighbors != null){
           choice = random(neighbors);
@@ -104,13 +94,13 @@ function mutate(map){
           
         }
       }
-      else if(symbol == "φ"){             // if it's a tree
+      else if(symbol == "T"){             // if it's a tree
         neighbors = check_neighbors(map, r, c);
         if(neighbors != null){
           for(i = 0; i < random(1, neighbors.length); i++){   // make some more trees
             choice = random(neighbors);
             if(choice != null){
-              map[choice[0]][choice[1]] = random(["o", "-", "-", "-", "o", "φ"]);
+              map[choice[0]][choice[1]] = random(["o", "-", "-", "-", "o", "T"]);
             }
           }
         }
@@ -181,7 +171,7 @@ function displayMap(map){
           Xcount++;
         }
         else{
-          symbol = "-";
+          symbol = random(["-", "T", "o"]);
         }
       }
       else if(symbol == "o"){ // if it's a bush
@@ -199,11 +189,11 @@ function displayMap(map){
       else if(symbol == "π"){
         fill(0);
       }
-      else if(symbol == "φ"){             // if it's a tree
+      else if(symbol == "T"){             // if it's a tree
         fill(46, 128, 50);                // make it green 
       }
-      else if(symbol == "∩"){  // if it's an arch
-        fill(66, 0, 7);         // fill it dark red
+      else if(symbol == "|"){  // if it's a dead tree
+        fill(59, 38, 28);         // fill it dark red
       }
       else if(symbol == "£"){   // if it's a monster
         fill(255, 0, 47); // fill it red

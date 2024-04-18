@@ -18,7 +18,7 @@ function setup() {
   rectMode(CENTER);
   textSize(15);
 
-  ascii = ["X", "-", "o", "O", "~", "s", "π", "T", "|", "£"];  // this will be the list of environment objects
+  ascii = ["X", "-", "o", "O", "=", "s", "π", "T", "|", "£"];  // this will be the list of environment objects
 
   // fill out the array with nothing but dashes (grass)
   for(x = 0; x < width; x++){
@@ -31,6 +31,7 @@ function setup() {
   // create user input 
   input = createInput('');
   input.position(435, 480);
+  randomSeed(input.value);
   input.input(repaint);
 
   displayMap(map);
@@ -77,13 +78,13 @@ function mutate(map){
           }
         }
       }
-      else if(symbol == "~"){ // if it's water
+      else if(symbol == "="){ // if it's water
         neighbors = check_neighbors(map, r, c);
         if(neighbors != null){
           for(i = 0; i < random(1, neighbors.length); i++){
             choice = random(neighbors);
             if(choice != null){
-              map[choice[0]][choice[1]] = random(["~", "~", "-", "-", "-"]);
+              map[choice[0]][choice[1]] = random(["=", "=", "-", "-", "-"]);
             }
             
           }
@@ -187,7 +188,7 @@ function displayMap(map){
       else if(symbol == "O"){ // if it's a boulder
         fill(92, 74, 73);
       }
-      else if(symbol == "~"){ // if it's water
+      else if(symbol == "="){ // if it's water
         fill(33, 91, 184);
       }
       else if(symbol == "s"){ // if it's a snake

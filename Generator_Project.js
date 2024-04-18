@@ -12,6 +12,7 @@ function preload(){
 
 function setup() {
   createCanvas(640, 480);
+  //canvas.parent("canvas");
   background(255);
   textFont(font);
   fill(0);
@@ -39,6 +40,7 @@ function setup() {
 
 function repaint(){
   background(255);
+  Xcount = 0;
   randomize_map(map);
   for(i = 0; i < MUTATION_COUNT; i++){
     mutate(map);

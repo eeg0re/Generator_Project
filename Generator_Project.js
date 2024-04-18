@@ -3,7 +3,8 @@ let space = 10;     // space will determine the space between characters
 let font;
 let Xcount = 0;
 let MUTATION_COUNT = 5; // Allow the user to set this?
-let ascii
+let ascii;
+let input;
 
 function preload(){
   font = loadFont('assets/JAi_____.TTF');
@@ -12,7 +13,6 @@ function preload(){
 function setup() {
   createCanvas(640, 480);
   background(255);
-  //randomSeed(0);    // set a random seed 
   textFont(font);
   fill(0);
   rectMode(CENTER);
@@ -27,12 +27,21 @@ function setup() {
       map[x][y] = "-";
     }
   }
+  
+  // create user input 
+  input = createInput('');
+  input.position(435, 480);
+  input.input(repaint);
 
+  displayMap(map);
+}
+
+function repaint(){
+  background(255);
   randomize_map(map);
   for(i = 0; i < MUTATION_COUNT; i++){
     mutate(map);
   }
-
   displayMap(map);
 }
 
@@ -43,7 +52,7 @@ function randomize_map(map){
     }
     for(r = 0; r < map[c].length; r++){
       chance = random();
-      if(chance <= 0.10){
+      if(chance <= 0.15){
         new_sym = random(ascii);
         map[r][c] = new_sym;
       }
@@ -150,9 +159,7 @@ function check_neighbors(map, x, y){
   }
 
   // return the list of all valid neighbors
-
   return valid_neighbors;
-
 }
 
 function displayMap(map){
@@ -218,6 +225,3 @@ function displayMap(map){
   }
 }
 
-function draw() {
-  
-}
